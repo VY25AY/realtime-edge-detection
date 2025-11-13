@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edge Detection Viewer</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+        color: #fff;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+      }
+
+      header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        background: linear-gradient(45deg, #00ff88, #00bbff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .subtitle {
+        color: #888;
+        font-size: 1.1em;
+      }
+
+      #container {
+        position: relative;
+        width: 100%;
+        max-width: 800px;
+        background: #222;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        margin-bottom: 30px;
+      }
+
+      #img {
+        width: 100%;
+        display: block;
+        image-rendering: crisp-edges;
+      }
+
+      #overlay {
+        position: absolute;
+        left: 16px;
+        top: 16px;
+        background: rgba(0, 0, 0, 0.75);
+        padding: 12px 16px;
+        border-radius: 8px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .stat {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+        font-size: 14px;
+      }
+
+      .stat:last-child {
+        margin-bottom: 0;
+      }
+
+      .stat-label {
+        color: #aaa;
+        margin-right: 12px;
+      }
+
+      .stat-value {
+        font-weight: bold;
+        color: #00ff88;
+        font-family: "Courier New", monospace;
+      }
+
+      .info-panel {
+        width: 100%;
+        max-width: 800px;
+        background: #222;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+      }
+
+      .info-panel h2 {
+        color: #00bbff;
+        margin-bottom: 16px;
+        font-size: 1.5em;
+      }
+
+      .info-panel ul {
+        list-style: none;
+        padding-left: 0;
+      }
+
+      .info-panel li {
+        padding: 8px 0;
+        border-bottom: 1px solid #333;
+        color: #ccc;
+      }
+
+      .info-panel li:last-child {
+        border-bottom: none;
+      }
+
+      .info-panel li::before {
+        content: "▸ ";
+        color: #00ff88;
+        font-weight: bold;
+        margin-right: 8px;
+      }
+
+      footer {
+        margin-top: 40px;
+        text-align: center;
+        color: #666;
+        font-size: 0.9em;
+      }
+
+      .loading {
+        text-align: center;
+        padding: 40px;
+        color: #888;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+      }
+
+      .pulse {
+        animation: pulse 2s infinite;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>🎥 Real-Time Edge Detection Viewer</h1>
+      <p class="subtitle">OpenCV C++ + Android + OpenGL ES</p>
+    </header>
+
+    <div id="container">
+      <img id="img" src="assets/sample.png" alt="Processed Frame" />
+      <div id="overlay">
+        <div class="stat">
+          <span class="stat-label">FPS:</span>
+          <span class="stat-value" id="fps">0</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Resolution:</span>
+          <span class="stat-value" id="res">Loading...</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Processing:</span>
+          <span class="stat-value">Canny Edge</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-panel">
+      <h2>📋 System Architecture</h2>
+      <ul>
+        <li><strong>Camera Input:</strong> Android Camera2 API (640×480)</li>
+        <li>
+          <strong>Processing:</strong> Native C++ with OpenCV (Canny Edge
+          Detection)
+        </li>
+        <li>
+          <strong>JNI Bridge:</strong> Bidirectional data transfer between Java
+          and C++
+        </li>
+        <li><strong>Rendering:</strong> OpenGL ES 2.0 with texture mapping</li>
+        <li>
+          <strong>Web Display:</strong> TypeScript + Canvas for frame
+          visualization
+        </li>
+      </ul>
+    </div>
+
+    <footer>
+      <p>Built with ❤️ for Flam Placement Drive Assignment</p>
+      <p>Android + OpenCV + OpenGL + TypeScript Integration</p>
+    </footer>
+
+    <script src="dist/main.js"></script>
+  </body>
+</html>
