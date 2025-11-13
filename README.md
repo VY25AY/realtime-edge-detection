@@ -30,19 +30,51 @@ A real-time camera processing application that captures frames from an Android d
 
 ---
 
-## 📷 Screenshots
+## 📷 Screenshots & Demos
 
-### Android App
+### 🌐 Web Viewer
 
-<!-- Add screenshot here: screenshot_app.png -->
+<div align="center">
+  <img src="screenshots/web-viewer-main.png" alt="Web Viewer Main Interface" width="800"/>
+  <p><em>Interactive TypeScript web viewer with real-time FPS monitoring and control buttons</em></p>
+</div>
 
-_Real-time Canny edge detection running at 15+ FPS_
+<div align="center">
+  <img src="screenshots/web-viewer-running.png" alt="Processing Active" width="800"/>
+  <p><em>Edge detection processing with animated progress bar and toast notifications</em></p>
+</div>
 
-### Web Viewer
+<div align="center">
+  <img src="screenshots/web-viewer-upload.png" alt="Upload Feature" width="800"/>
+  <p><em>Upload and process custom images with download functionality</em></p>
+</div>
 
-<!-- Add screenshot here: screenshot_web.png -->
+<div align="center">
+  <img src="screenshots/web-viewer-demo.gif" alt="Web Viewer Demo" width="800"/>
+  <p><em>🎬 Interactive demo: Start/Stop processing, Upload images, Real-time FPS updates</em></p>
+</div>
 
-_TypeScript web viewer displaying processed frame_
+### 📱 Android Application
+
+<div align="center">
+  <img src="screenshots/android-app-main.png" alt="Android App Main View" width="400"/>
+  <p><em>Real-time Canny edge detection at 30+ FPS using Camera2 API</em></p>
+</div>
+
+<div align="center">
+  <img src="screenshots/android-app-performance.png" alt="Performance Metrics" width="400"/>
+  <p><em>OpenGL ES 2.0 rendering with live FPS counter</em></p>
+</div>
+
+<div align="center">
+  <img src="screenshots/android-app-scene.png" alt="Different Scene" width="400"/>
+  <p><em>Edge detection on various objects - demonstrating algorithm robustness</em></p>
+</div>
+
+<div align="center">
+  <img src="screenshots/android-app-demo.gif" alt="Android Demo" width="400"/>
+  <p><em>🎬 Live demonstration: Real-time camera feed → OpenCV processing → OpenGL rendering</em></p>
+</div>
 
 ---
 
