@@ -1,7 +1,5 @@
 # Real-Time Edge Detection Viewer
 
-### Android + OpenCV C++ + OpenGL ES + TypeScript
-
 [![Android](https://img.shields.io/badge/Android-API%2024+-green.svg)](https://developer.android.com)
 [![OpenCV](https://img.shields.io/badge/OpenCV-4.x-blue.svg)](https://opencv.org)
 [![OpenGL ES](https://img.shields.io/badge/OpenGL%20ES-2.0-orange.svg)](https://www.khronos.org/opengles/)
@@ -11,22 +9,39 @@ A real-time camera processing application that captures frames from an Android d
 
 ---
 
+## 📋 Table of Contents
+
+- [Features](#-features-implemented)
+- [Demo](#-demo-output)
+- [Architecture](#️-architecture)
+- [Quick Start](#-quick-start)
+- [Setup Instructions](#️-setup-instructions)
+- [Project Structure](#-project-structure)
+- [Running the Application](#-running-the-application)
+- [Technical Details](#-technical-details)
+- [Development Notes](#-development-notes)
+- [Testing](#-testing)
+- [Resources](#-resources)
+- [License](#-license)
+
+---
+
 ## 🎯 Features Implemented
 
 ### Android App
 
-✅ **Camera Integration** - Camera2 API with ImageReader for efficient frame capture  
-✅ **Native Processing** - JNI bridge to C++ for OpenCV Canny edge detection  
-✅ **OpenGL Rendering** - OpenGL ES 2.0 texture-based rendering at 15+ FPS  
-✅ **Real-time Performance** - Optimized 640×480 frame processing  
-✅ **FPS Counter** - On-screen display of current frame rate
+- ✅ **Camera Integration** - Camera2 API with ImageReader for efficient frame capture
+- ✅ **Native Processing** - JNI bridge to C++ for OpenCV Canny edge detection
+- ✅ **OpenGL Rendering** - OpenGL ES 2.0 texture-based rendering at 15+ FPS
+- ✅ **Real-time Performance** - Optimized 640×480 frame processing
+- ✅ **FPS Counter** - On-screen display of current frame rate
 
 ### Web Viewer
 
-✅ **TypeScript Implementation** - Type-safe web viewer with DOM updates  
-✅ **Frame Display** - Shows sample processed frame with statistics overlay  
-✅ **FPS Simulation** - Live FPS counter animation  
-✅ **Responsive Design** - Modern UI with architecture overview
+- ✅ **TypeScript Implementation** - Type-safe web viewer with DOM updates
+- ✅ **Frame Display** - Shows sample processed frame with statistics overlay
+- ✅ **FPS Simulation** - Live FPS counter animation
+- ✅ **Responsive Design** - Modern UI with architecture overview
 
 ---
 
@@ -39,10 +54,10 @@ A real-time camera processing application that captures frames from an Android d
 
 **Processing Pipeline:**
 
-- Input: Camera2 API (640×480 YUV_420_888)
-- Algorithm: Canny Edge Detection (thresholds: 50, 150) with Gaussian blur (5×5, σ=1.5)
-- Performance: 30+ FPS real-time processing
-- Rendering: OpenGL ES 2.0 hardware acceleration
+- **Input**: Camera2 API (640×480 YUV_420_888)
+- **Algorithm**: Canny Edge Detection (thresholds: 50, 150) with Gaussian blur (5×5, σ=1.5)
+- **Performance**: 30+ FPS real-time processing
+- **Rendering**: OpenGL ES 2.0 hardware acceleration
 
 ---
 
@@ -79,9 +94,9 @@ A real-time camera processing application that captures frames from an Android d
                          ▼
 ┌─────────────────────────────────────────────────────────────┐
 │                  OpenGL ES 2.0 Renderer                      │
-│   - Texture upload (glTexSubImage2D)                         │
-│   - Fullscreen textured quad rendering                       │
-│   - GLSL vertex/fragment shaders                             │
+│   - Texture upload (glTexSubImage2D)                        │
+│   - Fullscreen textured quad rendering                      │
+│   - GLSL vertex/fragment shaders                            │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -97,7 +112,7 @@ A real-time camera processing application that captures frames from an Android d
 
 ---
 
-## ⚙️ Setup Instructions
+## 🚀 Quick Start
 
 ### Prerequisites
 
@@ -107,11 +122,26 @@ A real-time camera processing application that captures frames from an Android d
 - **Node.js** 18+ (for TypeScript web viewer)
 - **Gradle** 8.2+
 
+### Quick Setup (30 minutes)
+
+1. **Download OpenCV Android SDK** and extract to a known location
+2. **Configure OpenCV path** in `app/src/main/cpp/CMakeLists.txt`
+3. **Open project** in Android Studio and sync Gradle
+4. **Build project** and run on a physical Android device
+5. **Build web viewer** with `cd web && npm install && npm run build`
+
+For detailed instructions, see [QUICK_START.md](QUICK_START.md) or [BUILD_INSTRUCTIONS.md](BUILD_INSTRUCTIONS.md).
+
+---
+
+## ⚙️ Setup Instructions
+
 ### Step 1: Download OpenCV for Android
 
 ```bash
-# Download OpenCV Android SDK
-# Extract to a known location, e.g., C:\opencv-android-sdk\
+# Download OpenCV Android SDK from https://opencv.org/releases/
+# Extract to a known location, e.g., C:\opencv-android-sdk\ (Windows)
+# or ~/opencv-android-sdk/ (Mac/Linux)
 
 # The SDK structure should look like:
 opencv-android-sdk/
@@ -125,8 +155,14 @@ opencv-android-sdk/
 
 Edit `app/src/main/cpp/CMakeLists.txt` and update the OpenCV path:
 
+**Windows:**
 ```cmake
-set(OpenCV_DIR /path/to/opencv-android-sdk/sdk/native/jni)
+set(OpenCV_DIR C:/opencv-android-sdk/sdk/native/jni)
+```
+
+**Mac/Linux:**
+```cmake
+set(OpenCV_DIR /Users/YOUR_USERNAME/opencv-android-sdk/sdk/native/jni)
 ```
 
 Or in `app/build.gradle`, update the CMake arguments:
@@ -159,12 +195,16 @@ npm run build
 # Or use live server
 ```
 
+For automated setup, use the provided scripts:
+- **Windows**: `setup.bat`
+- **Mac/Linux**: `setup.sh`
+
 ---
 
 ## 📦 Project Structure
 
 ```
-project/
+realtime-edge-detection/
 ├── app/                          # Android application
 │   ├── src/main/
 │   │   ├── java/com/example/realtime/
@@ -191,29 +231,21 @@ project/
 │   ├── tsconfig.json                    # TypeScript config
 │   └── package.json                     # NPM dependencies
 │
+├── screenshots/                   # Demo images
+│   └── edge-detection-sample.svg
+│
 ├── build.gradle                  # Root build file
 ├── settings.gradle               # Gradle settings
-├── .gitignore                    # Git ignore rules
-└── README.md                     # This file
+├── README.md                     # This file
+├── QUICK_START.md                # Quick start guide
+├── BUILD_INSTRUCTIONS.md         # Detailed build instructions
+├── PROJECT_SUMMARY.md            # Project overview
+└── TROUBLESHOOTING.md            # Troubleshooting guide
 ```
 
 ---
 
 ## 🚀 Running the Application
-
-### Download the Android APK
-
-[![Android CI](https://github.com/VY25AY/Flam/actions/workflows/android-ci.yml/badge.svg)](https://github.com/VY25AY/Flam/actions/workflows/android-ci.yml)
-
-- Open the workflow page above, click the latest run, and download the artifact named `app-debug.apk`.
-- Then install it on your device.
-
-```powershell
-# On Windows PowerShell
-adb install -r app-debug.apk
-```
-
-Or build locally using Android Studio as shown below.
 
 ### Android App
 
@@ -228,10 +260,10 @@ Or build locally using Android Studio as shown below.
 2. Open `index.html` in a web browser
 3. View the sample processed frame with statistics overlay
 
-To add your own processed frame:
+**To add your own processed frame:**
 
 - Save a processed frame from the Android app
-- Copy to `web/assets/sample.svg`
+- Copy to `web/assets/sample.svg` or `web/assets/sample.png`
 - Refresh the browser
 
 ---
@@ -254,7 +286,7 @@ To add your own processed frame:
 
 ### OpenGL ES Rendering
 
-**Shaders**:
+**Shaders:**
 
 - **Vertex Shader**: Pass-through with texture coordinates
 - **Fragment Shader**: Simple texture sampling
@@ -264,36 +296,18 @@ To add your own processed frame:
 
 ### JNI Bridge
 
-**Method Signature**:
+**Method Signature:**
 
 ```kotlin
 external fun processFrame(input: ByteArray, width: Int, height: Int): ByteArray
 ```
 
-**Native Implementation**:
+**Native Implementation:**
 
 ```cpp
 JNIEXPORT jbyteArray JNICALL
 Java_com_example_realtime_NativeBridge_processFrame(...)
 ```
-
----
-
-## 🎨 Optional Enhancements (Bonus)
-
-### Implemented
-
-- ✅ Real-time FPS counter overlay
-- ✅ Efficient frame processing (640×480 optimization)
-- ✅ Clean modular architecture
-
-### Possible Future Additions
-
-- ⬜ Toggle between raw/processed view
-- ⬜ Additional filters (Grayscale, Sobel, etc.)
-- ⬜ Adjustable Canny thresholds via UI
-- ⬜ WebSocket for live frame streaming to web
-- ⬜ Save processed video to device storage
 
 ---
 
@@ -327,6 +341,24 @@ This project was developed incrementally with proper Git commits:
 
 ---
 
+## 🎨 Optional Enhancements
+
+### Implemented
+
+- ✅ Real-time FPS counter overlay
+- ✅ Efficient frame processing (640×480 optimization)
+- ✅ Clean modular architecture
+
+### Possible Future Additions
+
+- ⬜ Toggle between raw/processed view
+- ⬜ Additional filters (Grayscale, Sobel, etc.)
+- ⬜ Adjustable Canny thresholds via UI
+- ⬜ WebSocket for live frame streaming to web
+- ⬜ Save processed video to device storage
+
+---
+
 ## 🧪 Testing
 
 ### Test Device Requirements
@@ -337,9 +369,9 @@ This project was developed incrementally with proper Git commits:
 
 ### Tested On
 
-- Device: Modern Android smartphone
-- Android Version: 7.0+
-- Average FPS: 15-20 FPS
+- **Device**: Modern Android smartphone
+- **Android Version**: 7.0+
+- **Average FPS**: 15-20 FPS
 
 ---
 
@@ -352,7 +384,7 @@ This project was developed incrementally with proper Git commits:
 
 ---
 
-##  License
+## 📄 License
 
 This project is open source and available for educational purposes.
 
@@ -363,5 +395,17 @@ This project is open source and available for educational purposes.
 - OpenCV community for excellent Android support
 - Android Developer documentation for Camera2 examples
 - Open source contributors
-#   r e a l t i m e - e d g e - d e t e c t i o n  
- "# realtime-edge-detection" 
+
+---
+
+## 📖 Additional Documentation
+
+- **[QUICK_START.md](QUICK_START.md)** - Get running in 30 minutes
+- **[BUILD_INSTRUCTIONS.md](BUILD_INSTRUCTIONS.md)** - Detailed build instructions
+- **[PROJECT_SUMMARY.md](PROJECT_SUMMARY.md)** - Complete project overview
+- **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)** - Common issues and solutions
+- **[DOCS_INDEX.md](DOCS_INDEX.md)** - Documentation index
+
+---
+
+**Repository**: [https://github.com/VY25AY/realtime-edge-detection](https://github.com/VY25AY/realtime-edge-detection)
