@@ -65,35 +65,21 @@ jobs:
           fi
           echo "OpenCV found successfully at: $OPENCV_PATH"
 
-      - name: Setup Gradle Wrapper
+      - name: Setup Gradle
         run: |
-          # Download Gradle wrapper JAR if missing
-          if [ ! -f "gradle/wrapper/gradle-wrapper.jar" ]; then
-            echo "Downloading Gradle wrapper JAR..."
-            mkdir -p gradle/wrapper
-            curl -L -o gradle/wrapper/gradle-wrapper.jar \
-              https://raw.githubusercontent.com/gradle/gradle/v8.2.0/gradle/wrapper/gradle-wrapper.jar || \
-              curl -L -o gradle/wrapper/gradle-wrapper.jar \
-              https://github.com/gradle/gradle/raw/v8.2.0/gradle/wrapper/gradle-wrapper.jar
-          fi
+          # Extract Gradle version from wrapper properties
+          GRADLE_VERSION=$(grep distributionUrl gradle/wrapper/gradle-wrapper.properties | sed 's/.*gradle-\([0-9.]*\)-.*/\1/')
+          echo "Gradle version: $GRADLE_VERSION"
           
-          # Create simple gradlew script if missing
-          if [ ! -f "./gradlew" ]; then
-            echo "Creating gradlew script..."
-            cat > gradlew << 'GRADLEW_EOF'
-#!/bin/sh
-exec java -jar gradle/wrapper/gradle-wrapper.jar "$@"
-GRADLEW_EOF
-            chmod +x gradlew
-          fi
+          # Download Gradle directly
+          echo "Downloading Gradle ${GRADLE_VERSION}..."
+          curl -L -o gradle.zip "https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip"
+          unzip -q gradle.zip
+          export PATH="$PWD/gradle-${GRADLE_VERSION}/bin:$PATH"
+          echo "$PWD/gradle-${GRADLE_VERSION}/bin" >> $GITHUB_PATH
           
-          # Verify gradle wrapper jar exists
-          if [ ! -f "gradle/wrapper/gradle-wrapper.jar" ]; then
-            echo "Error: gradle-wrapper.jar not found!"
-            exit 1
-          fi
-          
-          echo "Gradle wrapper setup complete"
+          # Verify Gradle works
+          gradle --version
 
       - name: Build Debug APK
         env:
@@ -102,21 +88,10 @@ GRADLEW_EOF
           ANDROID_SDK_ROOT: ${{ env.ANDROID_SDK_ROOT }}
         run: |
           echo "Building with OpenCV at: $OPENCV_ANDROID_SDK"
-          # Use gradle directly from wrapper properties
-          GRADLE_VERSION=$(grep distributionUrl gradle/wrapper/gradle-wrapper.properties | sed 's/.*gradle-\([0-9.]*\)-.*/\1/')
-          echo "Using Gradle version: $GRADLE_VERSION"
-          
-          # Download and use Gradle if wrapper doesn't work
-          if ! ./gradlew --version 2>/dev/null; then
-            echo "Gradle wrapper failed, downloading Gradle directly..."
-            curl -L -o gradle.zip "https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip"
-            unzip -q gradle.zip
-            export PATH="$PWD/gradle-${GRADLE_VERSION}/bin:$PATH"
-            gradle --version
-            gradle clean assembleDebug --stacktrace --info --no-daemon
-          else
-            ./gradlew clean assembleDebug --stacktrace --info --no-daemon
-          fi
+          gradle clean assembleDebug \
+            --stacktrace \
+            --info \
+            --no-daemon
 
       - name: Check APK exists
         run: |
