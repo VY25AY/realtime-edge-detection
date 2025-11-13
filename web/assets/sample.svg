@@ -1,28 +1,76 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="480" viewBox="0 0 640 480">
-  <!-- Black background -->
+  <defs>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Black background simulating Canny output -->
   <rect width="640" height="480" fill="#000000"/>
   
-  <!-- Edge detection simulation - white edges -->
-  <!-- Rectangle outline -->
-  <rect x="100" y="100" width="200" height="150" fill="none" stroke="#ffffff" stroke-width="2"/>
+  <!-- Title watermark -->
+  <text x="320" y="30" font-family="monospace" font-size="16" fill="#00ff88" text-anchor="middle" opacity="0.7" font-weight="bold">
+    OpenCV Canny Edge Detection Demo
+  </text>
   
-  <!-- Circle outline -->
-  <circle cx="450" cy="175" r="80" fill="none" stroke="#ffffff" stroke-width="2"/>
+  <!-- Complex geometric shapes with edge detection -->
+  <!-- Building structure -->
+  <rect x="80" y="180" width="180" height="240" fill="none" stroke="#ffffff" stroke-width="2.5" filter="url(#glow)"/>
+  <line x1="80" y1="220" x2="260" y2="220" stroke="#ffffff" stroke-width="2"/>
+  <line x1="80" y1="260" x2="260" y2="260" stroke="#ffffff" stroke-width="2"/>
+  <line x1="80" y1="300" x2="260" y2="300" stroke="#ffffff" stroke-width="2"/>
+  <line x1="80" y1="340" x2="260" y2="340" stroke="#ffffff" stroke-width="2"/>
+  <line x1="170" y1="180" x2="170" y2="420" stroke="#ffffff" stroke-width="2"/>
   
-  <!-- Triangle outline -->
-  <path d="M 320 320 L 420 420 L 220 420 Z" fill="none" stroke="#ffffff" stroke-width="2"/>
+  <!-- Windows -->
+  <rect x="100" y="240" width="30" height="30" fill="none" stroke="#ffffff" stroke-width="1.5"/>
+  <rect x="190" y="240" width="30" height="30" fill="none" stroke="#ffffff" stroke-width="1.5"/>
+  <rect x="100" y="280" width="30" height="30" fill="none" stroke="#ffffff" stroke-width="1.5"/>
+  <rect x="190" y="280" width="30" height="30" fill="none" stroke="#ffffff" stroke-width="1.5"/>
   
-  <!-- Random edge lines to simulate Canny edges -->
-  <line x1="50" y1="50" x2="150" y2="80" stroke="#ffffff" stroke-width="1" opacity="0.8"/>
-  <line x1="500" y1="350" x2="580" y2="400" stroke="#ffffff" stroke-width="1" opacity="0.7"/>
-  <line x1="150" y1="300" x2="200" y2="350" stroke="#ffffff" stroke-width="1" opacity="0.9"/>
+  <!-- Car silhouette with edges -->
+  <ellipse cx="380" cy="390" rx="100" ry="30" fill="none" stroke="#ffffff" stroke-width="2" filter="url(#glow)"/>
+  <rect x="310" y="350" width="140" height="40" fill="none" stroke="#ffffff" stroke-width="2.5"/>
+  <circle cx="340" cy="390" r="15" fill="none" stroke="#ffffff" stroke-width="2"/>
+  <circle cx="420" cy="390" r="15" fill="none" stroke="#ffffff" stroke-width="2"/>
   
-  <!-- More edge fragments -->
-  <polyline points="400,50 430,70 450,100" fill="none" stroke="#ffffff" stroke-width="1" opacity="0.6"/>
-  <polyline points="100,400 120,430 150,450" fill="none" stroke="#ffffff" stroke-width="1" opacity="0.7"/>
+  <!-- Person silhouette -->
+  <circle cx="500" cy="280" r="25" fill="none" stroke="#ffffff" stroke-width="2" filter="url(#glow)"/>
+  <line x1="500" y1="305" x2="500" y2="370" stroke="#ffffff" stroke-width="2.5"/>
+  <line x1="500" y1="320" x2="470" y2="350" stroke="#ffffff" stroke-width="2"/>
+  <line x1="500" y1="320" x2="530" y2="350" stroke="#ffffff" stroke-width="2"/>
+  <line x1="500" y1="370" x2="470" y2="410" stroke="#ffffff" stroke-width="2"/>
+  <line x1="500" y1="370" x2="530" y2="410" stroke="#ffffff" stroke-width="2"/>
   
-  <!-- Text indicating this is sample -->
-  <text x="320" y="460" font-family="Arial" font-size="14" fill="#666" text-anchor="middle">
-    Sample Edge Detection Output - Replace with actual frame from Android app
+  <!-- Tree -->
+  <circle cx="560" cy="150" r="50" fill="none" stroke="#ffffff" stroke-width="2"/>
+  <line x1="560" y1="200" x2="560" y2="300" stroke="#ffffff" stroke-width="3"/>
+  
+  <!-- Ground line -->
+  <line x1="0" y1="420" x2="640" y2="420" stroke="#ffffff" stroke-width="3"/>
+  
+  <!-- Scattered edge fragments (noise simulation) -->
+  <line x1="30" y1="50" x2="50" y2="70" stroke="#ffffff" stroke-width="1" opacity="0.6"/>
+  <line x1="600" y1="100" x2="620" y2="80" stroke="#ffffff" stroke-width="1" opacity="0.5"/>
+  <line x1="150" y1="450" x2="170" y2="465" stroke="#ffffff" stroke-width="1" opacity="0.7"/>
+  <line x1="450" y1="50" x2="470" y2="60" stroke="#ffffff" stroke-width="1" opacity="0.5"/>
+  
+  <!-- Random edge noise -->
+  <circle cx="50" cy="200" r="3" fill="#ffffff" opacity="0.4"/>
+  <circle cx="590" cy="350" r="2" fill="#ffffff" opacity="0.5"/>
+  <circle cx="200" cy="80" r="2" fill="#ffffff" opacity="0.6"/>
+  
+  <!-- Parameter info -->
+  <text x="10" y="465" font-family="monospace" font-size="11" fill="#00bbff" opacity="0.8">
+    Canny: lowThresh=50, highThresh=150 | Gaussian: kernel=5x5, sigma=1.5
+  </text>
+  
+  <!-- Footer -->
+  <text x="640" y="465" font-family="monospace" font-size="11" fill="#ffaa00" text-anchor="end" opacity="0.8">
+    640×480 | YUV_420_888 → RGBA
   </text>
 </svg>

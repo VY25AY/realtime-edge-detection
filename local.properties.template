@@ -1,0 +1,20 @@
+## This file must *NOT* be checked into Version Control Systems,
+# as it contains information specific to your local configuration.
+#
+# Location of the SDK. This is only used by Gradle.
+# For customization when using a Version Control System, please read the
+# header note.
+
+# Android SDK location (will be auto-detected by Android Studio)
+sdk.dir=C\:\\Users\\YourUsername\\AppData\\Local\\Android\\Sdk
+
+# OpenCV SDK location - REQUIRED! Download from https://opencv.org/releases/
+# Extract the SDK and point to the 'sdk' folder
+# Example: opencv.dir=C\:\\opencv\\android-sdk\\OpenCV-android-sdk\\sdk
+opencv.dir=C\:\\path\\to\\opencv\\sdk
+
+# Instructions:
+# 1. Download OpenCV Android SDK (4.x or later)
+# 2. Extract the archive
+# 3. Update the opencv.dir path above to point to the 'sdk' folder
+# 4. Use forward slashes or double backslashes in Windows paths
