@@ -203,7 +203,7 @@ project/
 
 ### Download the Android APK
 
-[![Android CI](https://github.com/AY-10/realtime-edge-detection/actions/workflows/android-ci.yml/badge.svg)](https://github.com/AY-10/realtime-edge-detection/actions/workflows/android-ci.yml)
+[![Android CI](https://github.com/VY25AY/Flam/actions/workflows/android-ci.yml/badge.svg)](https://github.com/VY25AY/Flam/actions/workflows/android-ci.yml)
 
 - Open the workflow page above, click the latest run, and download the artifact named `app-debug.apk`.
 - Then install it on your device.
@@ -352,22 +352,14 @@ This project was developed incrementally with proper Git commits:
 
 ---
 
-## 👤 Author
+##  License
 
-**Anurag**  
-PSIT - Flam Placement Drive Assignment  
-Submission Date: November 14, 2025
-
----
-
-## 📄 License
-
-This project is submitted as part of the Flam placement assessment.
+This project is open source and available for educational purposes.
 
 ---
 
 ## 🙏 Acknowledgments
 
-- Assignment provided by Flam via PSIT Placement Cell
 - OpenCV community for excellent Android support
 - Android Developer documentation for Camera2 examples
+- Open source contributors

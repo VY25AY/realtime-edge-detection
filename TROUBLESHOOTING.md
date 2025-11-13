@@ -555,7 +555,7 @@ python systrace.py --time=10 -o trace.html sched freq idle am wm gfx view \
 
 4. **Check GitHub Issues**
 
-   - https://github.com/AY-10/realtime-edge-detection/issues
+   - https://github.com/VY25AY/Flam/issues
 
 5. **Enable Verbose Logging**
    ```bash

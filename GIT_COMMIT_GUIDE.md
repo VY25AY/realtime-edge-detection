@@ -192,10 +192,10 @@ Submission for Flam Placement Drive Assignment
 
 ```bash
 # Create repository on GitHub (github.com/new)
-# Repository name: realtime-edge-detection (or similar)
+# Repository name: Flam (or similar)
 
 # Add remote
-git remote add origin https://github.com/YOUR_USERNAME/realtime-edge-detection.git
+git remote add origin https://github.com/YOUR_USERNAME/Flam.git
 
 # Push with all commit history
 git branch -M main

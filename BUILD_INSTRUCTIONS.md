@@ -38,7 +38,7 @@ Complete step-by-step guide to build and run the Real-Time Edge Detection projec
 
 ### Step 1: Clone the Repository
 ```bash
-git clone https://github.com/AY-10/realtime-edge-detection.git
+git clone https://github.com/VY25AY/Flam.git
 cd realtime-edge-detection
 ```
 
@@ -408,7 +408,7 @@ If you encounter issues:
 1. Check **Logcat** for error messages
 2. Review **Gradle Build Output**
 3. Verify **OpenCV installation**
-4. Check **GitHub Issues**: https://github.com/AY-10/realtime-edge-detection/issues
+4. Check **GitHub Issues**: https://github.com/VY25AY/Flam/issues
 5. Read **TROUBLESHOOTING.md** for common solutions
 
 ---
