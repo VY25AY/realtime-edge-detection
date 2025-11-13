@@ -10,6 +10,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
       - name: Checkout
@@ -33,37 +34,27 @@ jobs:
             "cmake;3.22.1" \
             "ndk;25.1.8937393"
 
-      - name: Install Gradle via SDKMAN
-        run: |
-          sudo apt-get update -y
-          sudo apt-get install -y zip unzip curl
-          curl -s "https://get.sdkman.io" | bash
-          source "$HOME/.sdkman/bin/sdkman-init.sh"
-          sdk install gradle 8.2
-          echo "GRADLE_HOME=$HOME/.sdkman/candidates/gradle/current" >> $GITHUB_ENV
-          echo "$HOME/.sdkman/candidates/gradle/current/bin" >> $GITHUB_PATH
-        shell: bash
-
       - name: Download OpenCV Android SDK
         run: |
           curl -L -o opencv.zip https://github.com/opencv/opencv/releases/download/4.8.0/opencv-4.8.0-android-sdk.zip
           unzip -q opencv.zip -d $GITHUB_WORKSPACE
           ls -la $GITHUB_WORKSPACE
           mv $GITHUB_WORKSPACE/OpenCV-android-sdk $GITHUB_WORKSPACE/opencv-android-sdk || true
-          ls -la $GITHUB_WORKSPACE
+          ls -la $GITHUB_WORKSPACE/opencv-android-sdk
+
+      - name: Grant execute permission for Gradle wrapper
+        run: chmod +x gradlew
 
       - name: Build Debug APK
         env:
           OPENCV_ANDROID_SDK: ${{ github.workspace }}/opencv-android-sdk
         run: |
-          export PATH="$HOME/.sdkman/candidates/gradle/current/bin:$PATH"
-          gradle --version
-          gradle assembleDebug --stacktrace
-        shell: bash
+          ./gradlew --version
+          ./gradlew assembleDebug --stacktrace --info
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: app-debug.apk
           path: app/build/outputs/apk/debug/app-debug.apk
-
+          if-no-files-found: error
