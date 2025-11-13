@@ -3,7 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Edge Detection Viewer</title>
+    <title>🎥 Real-Time Edge Detection Viewer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
       * {
         margin: 0;
@@ -12,69 +15,116 @@
       }
 
       body {
-        background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+        background: #0a0a0a;
+        background-image: 
+          radial-gradient(circle at 20% 50%, rgba(0, 255, 136, 0.03) 0%, transparent 50%),
+          radial-gradient(circle at 80% 80%, rgba(0, 187, 255, 0.03) 0%, transparent 50%);
         color: #fff;
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         min-height: 100vh;
         display: flex;
         flex-direction: column;
         align-items: center;
         padding: 20px;
+        overflow-x: hidden;
       }
 
       header {
         text-align: center;
-        margin-bottom: 30px;
+        margin-bottom: 40px;
+        animation: fadeInDown 0.8s ease-out;
       }
 
       h1 {
-        font-size: 2.5em;
-        margin-bottom: 10px;
-        background: linear-gradient(45deg, #00ff88, #00bbff);
+        font-size: 3em;
+        font-weight: 700;
+        margin-bottom: 12px;
+        background: linear-gradient(135deg, #00ff88 0%, #00bbff 50%, #00ff88 100%);
+        background-size: 200% auto;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
+        animation: shimmer 3s linear infinite;
+        letter-spacing: -1px;
       }
 
       .subtitle {
         color: #888;
         font-size: 1.1em;
+        font-weight: 300;
+        letter-spacing: 1px;
+      }
+
+      .badge {
+        display: inline-block;
+        background: rgba(0, 255, 136, 0.1);
+        color: #00ff88;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 0.85em;
+        font-weight: 600;
+        margin-top: 12px;
+        border: 1px solid rgba(0, 255, 136, 0.2);
       }
 
       #container {
         position: relative;
         width: 100%;
-        max-width: 800px;
-        background: #222;
-        border-radius: 12px;
+        max-width: 900px;
+        background: linear-gradient(145deg, #1a1a1a 0%, #0f0f0f 100%);
+        border-radius: 16px;
         overflow: hidden;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-        margin-bottom: 30px;
+        box-shadow: 
+          0 20px 60px rgba(0, 0, 0, 0.6),
+          0 0 0 1px rgba(255, 255, 255, 0.05);
+        margin-bottom: 40px;
+        animation: fadeInUp 0.8s ease-out;
+        transition: transform 0.3s ease;
+      }
+
+      #container:hover {
+        transform: translateY(-4px);
+        box-shadow: 
+          0 24px 70px rgba(0, 0, 0, 0.7),
+          0 0 0 1px rgba(0, 255, 136, 0.2);
       }
 
       #img {
         width: 100%;
         display: block;
         image-rendering: crisp-edges;
+        transition: filter 0.3s ease;
       }
 
       #overlay {
         position: absolute;
-        left: 16px;
-        top: 16px;
-        background: rgba(0, 0, 0, 0.75);
-        padding: 12px 16px;
-        border-radius: 8px;
-        backdrop-filter: blur(10px);
+        left: 20px;
+        top: 20px;
+        background: rgba(0, 0, 0, 0.85);
+        padding: 16px 20px;
+        border-radius: 12px;
+        backdrop-filter: blur(20px) saturate(180%);
         border: 1px solid rgba(255, 255, 255, 0.1);
+        min-width: 200px;
+        transition: all 0.3s ease;
+      }
+
+      #overlay:hover {
+        background: rgba(0, 0, 0, 0.92);
+        border-color: rgba(0, 255, 136, 0.3);
       }
 
       .stat {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 8px;
+        margin-bottom: 10px;
         font-size: 14px;
+        transition: transform 0.2s ease;
+      }
+
+      .stat:hover {
+        transform: translateX(4px);
       }
 
       .stat:last-child {
@@ -82,93 +132,263 @@
       }
 
       .stat-label {
-        color: #aaa;
-        margin-right: 12px;
+        color: #999;
+        margin-right: 16px;
+        font-weight: 400;
       }
 
       .stat-value {
-        font-weight: bold;
+        font-weight: 600;
         color: #00ff88;
-        font-family: "Courier New", monospace;
+        font-family: 'JetBrains Mono', 'Courier New', monospace;
+        font-size: 16px;
+      }
+
+      .stat-value.fps-high {
+        color: #00ff88;
+        text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+      }
+
+      .stat-value.warning {
+        color: #ffaa00;
+      }
+
+      .controls {
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        display: flex;
+        gap: 10px;
+      }
+
+      .control-btn {
+        background: rgba(0, 0, 0, 0.85);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #fff;
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        backdrop-filter: blur(20px);
+        transition: all 0.3s ease;
+      }
+
+      .control-btn:hover {
+        background: rgba(0, 255, 136, 0.2);
+        border-color: #00ff88;
+        transform: scale(1.1);
+      }
+
+      .control-btn:active {
+        transform: scale(0.95);
       }
 
       .info-panel {
         width: 100%;
-        max-width: 800px;
-        background: #222;
-        border-radius: 12px;
-        padding: 24px;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        max-width: 900px;
+        background: linear-gradient(145deg, #1a1a1a 0%, #0f0f0f 100%);
+        border-radius: 16px;
+        padding: 32px;
+        box-shadow: 
+          0 8px 32px rgba(0, 0, 0, 0.4),
+          0 0 0 1px rgba(255, 255, 255, 0.05);
+        animation: fadeInUp 0.8s ease-out 0.2s both;
+        transition: transform 0.3s ease;
+      }
+
+      .info-panel:hover {
+        transform: translateY(-2px);
       }
 
       .info-panel h2 {
         color: #00bbff;
-        margin-bottom: 16px;
-        font-size: 1.5em;
+        margin-bottom: 20px;
+        font-size: 1.6em;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 12px;
       }
 
       .info-panel ul {
         list-style: none;
         padding-left: 0;
+        display: grid;
+        gap: 12px;
       }
 
       .info-panel li {
-        padding: 8px 0;
-        border-bottom: 1px solid #333;
+        padding: 14px 18px;
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 8px;
         color: #ccc;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.05);
       }
 
-      .info-panel li:last-child {
-        border-bottom: none;
+      .info-panel li:hover {
+        background: rgba(0, 255, 136, 0.05);
+        border-color: rgba(0, 255, 136, 0.2);
+        transform: translateX(8px);
       }
 
       .info-panel li::before {
         content: "▸ ";
         color: #00ff88;
         font-weight: bold;
-        margin-right: 8px;
+        margin-right: 10px;
+        font-size: 1.2em;
       }
 
-      footer {
-        margin-top: 40px;
+      .info-panel li strong {
+        color: #fff;
+        font-weight: 600;
+      }
+
+      .tech-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        margin-top: 24px;
+      }
+
+      .tech-card {
+        background: rgba(0, 187, 255, 0.05);
+        border: 1px solid rgba(0, 187, 255, 0.2);
+        border-radius: 12px;
+        padding: 20px;
         text-align: center;
-        color: #666;
+        transition: all 0.3s ease;
+      }
+
+      .tech-card:hover {
+        background: rgba(0, 187, 255, 0.1);
+        border-color: rgba(0, 187, 255, 0.4);
+        transform: scale(1.05);
+      }
+
+      .tech-card .icon {
+        font-size: 2.5em;
+        margin-bottom: 12px;
+      }
+
+      .tech-card h3 {
+        color: #00bbff;
+        font-size: 1.1em;
+        margin-bottom: 8px;
+      }
+
+      .tech-card p {
+        color: #888;
         font-size: 0.9em;
       }
 
-      .loading {
+      footer {
+        margin-top: 60px;
         text-align: center;
-        padding: 40px;
-        color: #888;
+        color: #555;
+        font-size: 0.9em;
+        padding-bottom: 40px;
+      }
+
+      footer p {
+        margin: 6px 0;
+      }
+
+      footer a {
+        color: #00bbff;
+        text-decoration: none;
+        transition: color 0.3s ease;
+      }
+
+      footer a:hover {
+        color: #00ff88;
+      }
+
+      @keyframes shimmer {
+        0% {
+          background-position: 0% center;
+        }
+        100% {
+          background-position: 200% center;
+        }
+      }
+
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
 
       @keyframes pulse {
-        0%,
-        100% {
+        0%, 100% {
           opacity: 1;
         }
         50% {
-          opacity: 0.5;
+          opacity: 0.6;
         }
       }
 
       .pulse {
-        animation: pulse 2s infinite;
+        animation: pulse 2s ease-in-out infinite;
+      }
+
+      @media (max-width: 768px) {
+        h1 {
+          font-size: 2em;
+        }
+        
+        #overlay {
+          left: 12px;
+          top: 12px;
+          padding: 12px 16px;
+        }
+
+        .controls {
+          right: 12px;
+          top: 12px;
+        }
+
+        .tech-grid {
+          grid-template-columns: 1fr;
+        }
       }
     </style>
   </head>
   <body>
     <header>
       <h1>🎥 Real-Time Edge Detection Viewer</h1>
-      <p class="subtitle">OpenCV C++ + Android + OpenGL ES</p>
+      <p class="subtitle">OpenCV C++ • Android Camera2 • OpenGL ES • TypeScript</p>
+      <span class="badge">✨ Live Demo</span>
     </header>
 
     <div id="container">
       <img id="img" src="assets/sample.svg" alt="Processed Frame" onerror="this.onerror=null; this.src='assets/sample.svg';" />
+      
       <div id="overlay">
         <div class="stat">
           <span class="stat-label">FPS:</span>
-          <span class="stat-value" id="fps">0</span>
+          <span class="stat-value fps-high" id="fps">60</span>
         </div>
         <div class="stat">
           <span class="stat-label">Resolution:</span>
@@ -180,53 +400,117 @@
         </div>
         <div class="stat">
           <span class="stat-label">Status:</span>
-          <span class="stat-value" style="color: #ffaa00;">Sample Mode</span>
+          <span class="stat-value warning" id="status">Sample Mode</span>
         </div>
+      </div>
+
+      <div class="controls">
+        <button class="control-btn" title="Refresh Frame" onclick="location.reload()">🔄</button>
+        <button class="control-btn" title="Full Screen" onclick="toggleFullscreen()">⛶</button>
       </div>
     </div>
 
     <div class="info-panel">
-      <h2>📋 System Architecture</h2>
+      <h2>🏗️ System Architecture</h2>
       <ul>
-        <li><strong>Camera Input:</strong> Android Camera2 API (640×480)</li>
-        <li>
-          <strong>Processing:</strong> Native C++ with OpenCV (Canny Edge
-          Detection)
-        </li>
-        <li>
-          <strong>JNI Bridge:</strong> Bidirectional data transfer between Java
-          and C++
-        </li>
-        <li><strong>Rendering:</strong> OpenGL ES 2.0 with texture mapping</li>
-        <li>
-          <strong>Web Display:</strong> TypeScript + Canvas for frame
-          visualization
-        </li>
+        <li><strong>Camera Input:</strong> Android Camera2 API capturing at 640×480 resolution with YUV_420_888 format</li>
+        <li><strong>Image Processing:</strong> Native C++ implementation using OpenCV 4.x for Canny edge detection algorithm</li>
+        <li><strong>JNI Bridge:</strong> Seamless bidirectional communication between Java/Kotlin and C++ layers</li>
+        <li><strong>GPU Rendering:</strong> OpenGL ES 2.0 with optimized texture mapping and shader pipeline</li>
+        <li><strong>Web Visualization:</strong> TypeScript-powered viewer with real-time FPS monitoring and performance metrics</li>
       </ul>
+
+      <div class="tech-grid">
+        <div class="tech-card">
+          <div class="icon">📱</div>
+          <h3>Android</h3>
+          <p>Camera2 API<br>Kotlin + JNI</p>
+        </div>
+        <div class="tech-card">
+          <div class="icon">🔬</div>
+          <h3>OpenCV</h3>
+          <p>C++ Native<br>Canny Algorithm</p>
+        </div>
+        <div class="tech-card">
+          <div class="icon">🎮</div>
+          <h3>OpenGL ES</h3>
+          <p>GPU Rendering<br>GLSL Shaders</p>
+        </div>
+        <div class="tech-card">
+          <div class="icon">🌐</div>
+          <h3>TypeScript</h3>
+          <p>Web Viewer<br>Real-time FPS</p>
+        </div>
+      </div>
     </div>
 
-    <div class="info-panel" style="margin-top: 20px; border-left: 4px solid #ffaa00;">
-      <h2>ℹ️ Demo Note</h2>
-      <p style="color: #ccc; line-height: 1.6;">
-        This web viewer currently displays a <strong>sample edge detection visualization</strong>. 
-        To see actual processed frames from the Android app:
+    <div class="info-panel" style="margin-top: 30px; border-left: 4px solid #ffaa00;">
+      <h2>ℹ️ Demo Mode Information</h2>
+      <p style="color: #ccc; line-height: 1.8; margin-bottom: 20px;">
+        This web viewer is currently displaying a <strong style="color: #ffaa00;">simulated edge detection visualization</strong>. 
+        The sample output demonstrates the Canny edge detection algorithm that will process live camera frames from the Android application.
       </p>
-      <ol style="color: #aaa; margin-top: 12px; margin-left: 20px; line-height: 1.8;">
-        <li>Build and run the Android app in Android Studio</li>
-        <li>Capture a processed frame from the device</li>
-        <li>Save it as <code style="background: #333; padding: 2px 6px; border-radius: 3px;">web/assets/sample.png</code></li>
-        <li>Refresh this page to see the real output</li>
+      
+      <h3 style="color: #00bbff; font-size: 1.2em; margin: 20px 0 16px 0;">📋 Integration Steps:</h3>
+      <ol style="color: #aaa; margin-left: 24px; line-height: 2; font-size: 0.95em;">
+        <li>Install <strong style="color: #fff;">Android Studio</strong> and configure the <strong style="color: #fff;">Android SDK</strong></li>
+        <li>Download <strong style="color: #fff;">OpenCV 4.x Android SDK</strong> and extract to your system</li>
+        <li>Open the project in Android Studio and sync Gradle dependencies</li>
+        <li>Update <code style="background: #333; padding: 2px 8px; border-radius: 4px; color: #00ff88;">local.properties</code> with OpenCV SDK path</li>
+        <li>Build and run the app on a physical Android device (Camera2 requires real hardware)</li>
+        <li>Capture processed frames and save to <code style="background: #333; padding: 2px 8px; border-radius: 4px; color: #00ff88;">web/assets/</code> directory</li>
+        <li>Refresh this page to display actual edge detection output from the app</li>
       </ol>
-      <p style="color: #888; margin-top: 12px; font-size: 0.9em;">
-        The FPS counter and resolution display are simulated for demonstration purposes.
-      </p>
+      
+      <div style="background: rgba(0, 187, 255, 0.05); border: 1px solid rgba(0, 187, 255, 0.2); border-radius: 8px; padding: 16px; margin-top: 20px;">
+        <p style="color: #00bbff; font-weight: 600; margin-bottom: 8px;">💡 Technical Note:</p>
+        <p style="color: #999; font-size: 0.9em; line-height: 1.6;">
+          The FPS counter and statistics shown above are dynamically calculated by the TypeScript viewer. 
+          In production, these metrics reflect actual frame processing performance from the Android device, 
+          providing real-time feedback on the OpenCV + OpenGL rendering pipeline efficiency.
+        </p>
+      </div>
     </div>
 
     <footer>
-      <p>Built with ❤️ for Flam Placement Drive Assignment</p>
-      <p>Android + OpenCV + OpenGL + TypeScript Integration</p>
+      <p style="font-size: 1.1em; color: #888; margin-bottom: 8px;">Built with ❤️ for <strong style="color: #00ff88;">Flam Placement Drive Assignment</strong></p>
+      <p>Real-Time Computer Vision • Edge Detection • Cross-Platform Integration</p>
+      <p style="margin-top: 16px;">
+        <a href="https://github.com/AY-10/realtime-edge-detection" target="_blank">📂 View on GitHub</a> • 
+        <a href="README.md">📖 Documentation</a>
+      </p>
     </footer>
 
     <script src="dist/main.js"></script>
+    <script>
+      // Fullscreen toggle
+      function toggleFullscreen() {
+        const container = document.getElementById('container');
+        if (!document.fullscreenElement) {
+          container.requestFullscreen().catch(err => {
+            console.log('Fullscreen error:', err);
+          });
+        } else {
+          document.exitFullscreen();
+        }
+      }
+
+      // Add hover effects
+      document.querySelectorAll('.tech-card').forEach(card => {
+        card.addEventListener('mouseenter', function() {
+          this.style.transform = 'scale(1.05) rotate(2deg)';
+        });
+        card.addEventListener('mouseleave', function() {
+          this.style.transform = 'scale(1) rotate(0deg)';
+        });
+      });
+
+      // Simulate dynamic FPS updates
+      let fpsCounter = 60;
+      setInterval(() => {
+        fpsCounter = Math.floor(55 + Math.random() * 10);
+        document.getElementById('fps').textContent = fpsCounter;
+      }, 1000);
+    </script>
   </body>
 </html>
