@@ -48,19 +48,28 @@ jobs:
       - name: Download OpenCV Android SDK
         run: |
           echo "Downloading OpenCV Android SDK..."
-          curl -L -o opencv.zip https://github.com/opencv/opencv/releases/download/4.8.0/opencv-4.8.0-android-sdk.zip
+          curl -L -f -o opencv.zip https://github.com/opencv/opencv/releases/download/4.8.0/opencv-4.8.0-android-sdk.zip || exit 1
           echo "Extracting OpenCV..."
-          unzip -q opencv.zip -d $GITHUB_WORKSPACE
+          unzip -q opencv.zip -d $GITHUB_WORKSPACE || exit 1
           if [ -d "$GITHUB_WORKSPACE/OpenCV-android-sdk" ]; then
             mv $GITHUB_WORKSPACE/OpenCV-android-sdk $GITHUB_WORKSPACE/opencv-android-sdk
           fi
           echo "OPENCV_PATH=$GITHUB_WORKSPACE/opencv-android-sdk" >> $GITHUB_ENV
+          echo "OpenCV path set to: $GITHUB_WORKSPACE/opencv-android-sdk"
 
       - name: Verify OpenCV structure
         run: |
+          echo "Verifying OpenCV at: $OPENCV_PATH"
+          if [ ! -d "$OPENCV_PATH" ]; then
+            echo "Error: OpenCV directory does not exist"
+            ls -la $GITHUB_WORKSPACE | grep -i opencv || echo "No OpenCV directories found"
+            exit 1
+          fi
           if [ ! -f "$OPENCV_PATH/sdk/native/jni/OpenCVConfig.cmake" ]; then
-            echo "Error: OpenCV not found at expected location"
-            ls -la $OPENCV_PATH || echo "OPENCV_PATH does not exist"
+            echo "Error: OpenCVConfig.cmake not found"
+            echo "OpenCV directory structure:"
+            find $OPENCV_PATH -name "*.cmake" -type f | head -10 || echo "No cmake files found"
+            ls -la $OPENCV_PATH/sdk/native/jni/ 2>/dev/null || echo "jni directory does not exist"
             exit 1
           fi
           echo "OpenCV found successfully at: $OPENCV_PATH"
@@ -68,18 +77,28 @@ jobs:
       - name: Setup Gradle
         run: |
           # Extract Gradle version from wrapper properties
+          if [ ! -f "gradle/wrapper/gradle-wrapper.properties" ]; then
+            echo "Error: gradle-wrapper.properties not found!"
+            exit 1
+          fi
           GRADLE_VERSION=$(grep distributionUrl gradle/wrapper/gradle-wrapper.properties | sed 's/.*gradle-\([0-9.]*\)-.*/\1/')
           echo "Gradle version: $GRADLE_VERSION"
           
+          if [ -z "$GRADLE_VERSION" ]; then
+            echo "Error: Could not extract Gradle version"
+            exit 1
+          fi
+          
           # Download Gradle directly
           echo "Downloading Gradle ${GRADLE_VERSION}..."
-          curl -L -o gradle.zip "https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip"
-          unzip -q gradle.zip
+          curl -L -f -o gradle.zip "https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip" || exit 1
+          unzip -q gradle.zip || exit 1
           export PATH="$PWD/gradle-${GRADLE_VERSION}/bin:$PATH"
           echo "$PWD/gradle-${GRADLE_VERSION}/bin" >> $GITHUB_PATH
           
           # Verify Gradle works
-          gradle --version
+          gradle --version || exit 1
+          echo "Gradle setup complete"
 
       - name: Build Debug APK
         env:
@@ -88,17 +107,24 @@ jobs:
           ANDROID_SDK_ROOT: ${{ env.ANDROID_SDK_ROOT }}
         run: |
           echo "Building with OpenCV at: $OPENCV_ANDROID_SDK"
+          echo "ANDROID_HOME: $ANDROID_HOME"
+          echo "ANDROID_SDK_ROOT: $ANDROID_SDK_ROOT"
+          
+          # Ensure Gradle is in PATH
+          export PATH="$PWD/gradle-8.2/bin:$PATH"
+          
           gradle clean assembleDebug \
             --stacktrace \
             --info \
-            --no-daemon
+            --no-daemon || exit 1
 
       - name: Check APK exists
         run: |
           if [ ! -f "app/build/outputs/apk/debug/app-debug.apk" ]; then
             echo "Error: APK not found!"
-            ls -la app/build/outputs/apk/debug/ || echo "APK directory does not exist"
-            find app/build -name "*.apk" || echo "No APK files found anywhere"
+            echo "Checking build outputs..."
+            ls -la app/build/outputs/apk/debug/ 2>/dev/null || echo "APK directory does not exist"
+            find app/build -name "*.apk" 2>/dev/null || echo "No APK files found anywhere"
             exit 1
           fi
           ls -lh app/build/outputs/apk/debug/app-debug.apk
