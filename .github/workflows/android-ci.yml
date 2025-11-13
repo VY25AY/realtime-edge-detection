@@ -42,6 +42,7 @@ jobs:
           sdk install gradle 8.2
           echo "GRADLE_HOME=$HOME/.sdkman/candidates/gradle/current" >> $GITHUB_ENV
           echo "$HOME/.sdkman/candidates/gradle/current/bin" >> $GITHUB_PATH
+        shell: bash
 
       - name: Download OpenCV Android SDK
         run: |
@@ -55,8 +56,10 @@ jobs:
         env:
           OPENCV_ANDROID_SDK: ${{ github.workspace }}/opencv-android-sdk
         run: |
+          export PATH="$HOME/.sdkman/candidates/gradle/current/bin:$PATH"
           gradle --version
           gradle assembleDebug --stacktrace
+        shell: bash
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
