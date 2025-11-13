@@ -364,4 +364,4 @@ This project is open source and available for educational purposes.
 - Android Developer documentation for Camera2 examples
 - Open source contributors
 #   r e a l t i m e - e d g e - d e t e c t i o n  
- 
+ "# realtime-edge-detection" 
