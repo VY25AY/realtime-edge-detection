@@ -8,21 +8,21 @@ const fpsEl = document.getElementById('fps')!;
 const resEl = document.getElementById('res')!;
 
 let lastTime = performance.now();
-let frames = 0;
+let frameCount = 0;
 let currentFPS = 0;
 
 /**
  * Main animation loop to calculate FPS
  */
 function tick(): void {
-    frames++;
+    frameCount++;
     const now = performance.now();
     const elapsed = now - lastTime;
 
     if (elapsed >= 1000) {
-        currentFPS = Math.round((frames * 1000) / elapsed);
+        currentFPS = Math.round((frameCount * 1000) / elapsed);
         fpsEl.textContent = currentFPS.toString();
-        frames = 0;
+        frameCount = 0;
         lastTime = now;
     }
 
