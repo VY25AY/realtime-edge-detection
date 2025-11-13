@@ -8,18 +8,18 @@ Welcome to the Real-Time Edge Detection project! This index will help you naviga
 
 ### New to the Project?
 
-**→ Read:** `QUICK_START.md`  
-Get up and running in 30 minutes with streamlined instructions.
+**→ Read:** `README.md`  
+Complete overview and setup instructions.
 
-### Need Complete Setup?
+### Need Build Details?
 
-**→ Read:** `SETUP_GUIDE.md`  
-Detailed setup instructions for Android, NDK, OpenCV, and TypeScript.
+**→ Read:** `BUILD_INSTRUCTIONS.md`  
+Detailed build steps for Android and web components.
 
 ### Ready to Submit?
 
 **→ Read:** `SUBMISSION_CHECKLIST.md`  
-Verify everything before submitting to avoid common mistakes.
+Verify everything before submitting.
 
 ---
 
@@ -27,12 +27,12 @@ Verify everything before submitting to avoid common mistakes.
 
 ### 📱 For Building the Android App
 
-| Document                          | Purpose                | When to Use       |
-| --------------------------------- | ---------------------- | ----------------- |
-| `QUICK_START.md`                  | Fast setup (30 min)    | First time setup  |
-| `SETUP_GUIDE.md`                  | Detailed instructions  | Troubleshooting   |
-| `README.md`                       | Complete documentation | Reference         |
-| `app/src/main/cpp/CMakeLists.txt` | CMake config           | OpenCV path setup |
+| Document                          | Purpose                | When to Use        |
+| --------------------------------- | ---------------------- | ------------------ |
+| `README.md`                       | Complete documentation | First time setup   |
+| `BUILD_INSTRUCTIONS.md`           | Detailed build steps   | Step-by-step guide |
+| `TROUBLESHOOTING.md`              | Common issues          | When stuck         |
+| `app/src/main/cpp/CMakeLists.txt` | CMake config           | OpenCV path setup  |
 
 **Key Sections in README.md:**
 
@@ -46,26 +46,25 @@ Verify everything before submitting to avoid common mistakes.
 | Document                         | Purpose           | When to Use                |
 | -------------------------------- | ----------------- | -------------------------- |
 | `web/README.md`                  | Web setup         | Building TypeScript        |
-| `README.md` (Web Viewer section) | Integration guide | Architecture understanding |
-| `QUICK_START.md` (Web section)   | Fast build        | Quick setup                |
+| `web/integration.md`             | Integration guide | Architecture understanding |
+| `README.md` (Web Viewer section) | Overview          | General reference          |
 
 ### 🔧 For Git & Version Control
 
-| Document                       | Purpose         | When to Use         |
-| ------------------------------ | --------------- | ------------------- |
-| `GIT_COMMIT_GUIDE.md`          | Commit strategy | Creating commits    |
-| `.gitignore`                   | Ignore rules    | Before first commit |
-| `QUICK_START.md` (Git section) | Quick commits   | Time-constrained    |
+| Document              | Purpose         | When to Use         |
+| --------------------- | --------------- | ------------------- |
+| `GIT_COMMIT_GUIDE.md` | Commit strategy | Creating commits    |
+| `.gitignore`          | Ignore rules    | Before first commit |
 
 **Important:** The assignment REQUIRES proper commit history!
 
 ### 📤 For Submission
 
-| Document                  | Purpose                 | When to Use       |
-| ------------------------- | ----------------------- | ----------------- |
-| `SUBMISSION_CHECKLIST.md` | Pre-submit verification | Before submitting |
-| `PROJECT_SUMMARY.md`      | Complete overview       | Final review      |
-| `README.md`               | Main documentation      | Must be complete  |
+| Document                   | Purpose                 | When to Use       |
+| -------------------------- | ----------------------- | ----------------- |
+| `SUBMISSION_CHECKLIST.md`  | Pre-submit verification | Before submitting |
+| `ASSESSMENT_COMPLIANCE.md` | Scoring breakdown       | Final review      |
+| `README.md`                | Main documentation      | Must be complete  |
 
 ---
 
@@ -73,27 +72,29 @@ Verify everything before submitting to avoid common mistakes.
 
 ### "I want to build the project fast"
 
-1. `QUICK_START.md` - Follow this
-2. `SETUP_GUIDE.md` - If you hit issues
-3. `SUBMISSION_CHECKLIST.md` - Before submitting
+1. `README.md` - Setup instructions
+2. `BUILD_INSTRUCTIONS.md` - Detailed steps
+3. `TROUBLESHOOTING.md` - If you hit issues
+4. `SUBMISSION_CHECKLIST.md` - Before submitting
 
 ### "I want to understand the architecture"
 
 1. `README.md` → Architecture section
 2. `README.md` → Frame Flow diagram
 3. `README.md` → Technical Details
-4. Review actual code files
+4. `web/integration.md` → Android-Web integration
+5. Review actual code files
 
 ### "I want to avoid submission mistakes"
 
 1. `SUBMISSION_CHECKLIST.md` - Complete checklist
 2. `GIT_COMMIT_GUIDE.md` - Proper commits
-3. `PROJECT_SUMMARY.md` - Verify all files
+3. `ASSESSMENT_COMPLIANCE.md` - Verify scoring
 
 ### "I'm stuck on a specific issue"
 
-1. `SETUP_GUIDE.md` → Troubleshooting section
-2. `QUICK_START.md` → Quick Troubleshooting
+1. `TROUBLESHOOTING.md` - Common issues and solutions
+2. `BUILD_INSTRUCTIONS.md` - Step-by-step guidance
 3. `README.md` → Known Limitations
 
 ---

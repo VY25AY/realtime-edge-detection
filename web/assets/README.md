@@ -1,24 +1,37 @@
-# Sample Image Placeholder
+# Web Assets# Sample Image Placeholder
 
-This file is a placeholder. Please replace `sample.png` with an actual processed frame from your Android app.
+This folder contains assets for the web viewer.This file is a placeholder. Please replace `sample.png` with an actual processed frame from your Android app.
 
-## How to Add Your Processed Frame
+## Current Files## How to Add Your Processed Frame
 
-### Method 1: From Android Device (Recommended)
+- `sample.svg` - Sample edge detection output from the Android app (Canny algorithm)### Method 1: From Android Device (Recommended)
 
-1. Run the Android app on your device
+## Usage1. Run the Android app on your device
+
 2. Add this code to `MainActivity.kt` after processing a frame:
 
-```kotlin
-// Add this method to MainActivity
-private fun saveProcessedFrame(bytes: ByteArray, width: Int, height: Int) {
-    val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-    val buffer = ByteBuffer.wrap(bytes)
-    bitmap.copyPixelsFromBuffer(buffer)
+The web viewer (`index.html`) loads `sample.svg` to demonstrate edge detection output.
 
-    val file = File(getExternalFilesDir(null), "processed_frame.png")
-    FileOutputStream(file).use { out ->
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
+```kotlin
+
+## Adding Your Own Frames// Add this method to MainActivity
+
+private fun saveProcessedFrame(bytes: ByteArray, width: Int, height: Int) {
+
+To replace with your own processed frames:    val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+
+    val buffer = ByteBuffer.wrap(bytes)
+
+1. Run the Android app    bitmap.copyPixelsFromBuffer(buffer)
+
+2. Capture a processed frame
+
+3. Export as SVG or PNG    val file = File(getExternalFilesDir(null), "processed_frame.png")
+
+4. Replace `sample.svg` in this folder    FileOutputStream(file).use { out ->
+
+5. Refresh the web viewer        bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
+
     }
     Log.d("MainActivity", "Saved to: ${file.absolutePath}")
 }

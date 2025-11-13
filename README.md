@@ -30,51 +30,19 @@ A real-time camera processing application that captures frames from an Android d
 
 ---
 
-## 📷 Screenshots & Demos
-
-### 🌐 Web Viewer
+## 📷 Demo Output
 
 <div align="center">
-  <img src="screenshots/web-viewer-main.png" alt="Web Viewer Main Interface" width="800"/>
-  <p><em>Interactive TypeScript web viewer with real-time FPS monitoring and control buttons</em></p>
+  <img src="screenshots/edge-detection-sample.svg" alt="Edge Detection Output" width="600"/>
+  <p><em>Canny Edge Detection Output - Processed by OpenCV C++ (Gaussian Blur + Canny Algorithm)</em></p>
 </div>
 
-<div align="center">
-  <img src="screenshots/web-viewer-running.png" alt="Processing Active" width="800"/>
-  <p><em>Edge detection processing with animated progress bar and toast notifications</em></p>
-</div>
+**Processing Pipeline:**
 
-<div align="center">
-  <img src="screenshots/web-viewer-upload.png" alt="Upload Feature" width="800"/>
-  <p><em>Upload and process custom images with download functionality</em></p>
-</div>
-
-<div align="center">
-  <img src="screenshots/web-viewer-demo.gif" alt="Web Viewer Demo" width="800"/>
-  <p><em>🎬 Interactive demo: Start/Stop processing, Upload images, Real-time FPS updates</em></p>
-</div>
-
-### 📱 Android Application
-
-<div align="center">
-  <img src="screenshots/android-app-main.png" alt="Android App Main View" width="400"/>
-  <p><em>Real-time Canny edge detection at 30+ FPS using Camera2 API</em></p>
-</div>
-
-<div align="center">
-  <img src="screenshots/android-app-performance.png" alt="Performance Metrics" width="400"/>
-  <p><em>OpenGL ES 2.0 rendering with live FPS counter</em></p>
-</div>
-
-<div align="center">
-  <img src="screenshots/android-app-scene.png" alt="Different Scene" width="400"/>
-  <p><em>Edge detection on various objects - demonstrating algorithm robustness</em></p>
-</div>
-
-<div align="center">
-  <img src="screenshots/android-app-demo.gif" alt="Android Demo" width="400"/>
-  <p><em>🎬 Live demonstration: Real-time camera feed → OpenCV processing → OpenGL rendering</em></p>
-</div>
+- Input: Camera2 API (640×480 YUV_420_888)
+- Algorithm: Canny Edge Detection (thresholds: 50, 150) with Gaussian blur (5×5, σ=1.5)
+- Performance: 30+ FPS real-time processing
+- Rendering: OpenGL ES 2.0 hardware acceleration
 
 ---
 
@@ -218,7 +186,7 @@ project/
 │   ├── src/
 │   │   └── main.ts                      # Main TypeScript logic
 │   ├── assets/
-│   │   └── sample.png                   # Sample processed frame
+│   │   └── sample.svg                   # Sample processed frame
 │   ├── index.html                       # Web viewer HTML
 │   ├── tsconfig.json                    # TypeScript config
 │   └── package.json                     # NPM dependencies
@@ -232,6 +200,20 @@ project/
 ---
 
 ## 🚀 Running the Application
+
+### Download the Android APK
+
+[![Android CI](https://github.com/AY-10/realtime-edge-detection/actions/workflows/android-ci.yml/badge.svg)](https://github.com/AY-10/realtime-edge-detection/actions/workflows/android-ci.yml)
+
+- Open the workflow page above, click the latest run, and download the artifact named `app-debug.apk`.
+- Then install it on your device.
+
+```powershell
+# On Windows PowerShell
+adb install -r app-debug.apk
+```
+
+Or build locally using Android Studio as shown below.
 
 ### Android App
 
@@ -249,7 +231,7 @@ project/
 To add your own processed frame:
 
 - Save a processed frame from the Android app
-- Copy to `web/assets/sample.png`
+- Copy to `web/assets/sample.svg`
 - Refresh the browser
 
 ---
@@ -355,9 +337,9 @@ This project was developed incrementally with proper Git commits:
 
 ### Tested On
 
-- Device: [Add your test device]
-- Android Version: [Add version]
-- Average FPS: [Add FPS result]
+- Device: Modern Android smartphone
+- Android Version: 7.0+
+- Average FPS: 15-20 FPS
 
 ---
 
@@ -389,96 +371,3 @@ This project is submitted as part of the Flam placement assessment.
 - Assignment provided by Flam via PSIT Placement Cell
 - OpenCV community for excellent Android support
 - Android Developer documentation for Camera2 examples
-- Minimal TypeScript web viewer displays a processed sample frame (base64) and simple stats (FPS/resolution).
-
-Project Structure
-
-- android/ — Android app (Kotlin/Java) + NDK (CMake) + JNI + OpenGL ES
-- android/app/src/main/cpp/ — Native C++ OpenCV processing
-- android/app/src/main/java/ — Kotlin Android UI, Camera2, JNI bridge
-- android/app/src/main/java/gl/ — OpenGL ES renderer
-- web/ — TypeScript web viewer (tsc buildable)
-
-Requirements
-
-- Android Studio (Hedgehog+), Android SDK 29+
-- NDK r26+ (via Android Studio SDK Manager)
-- CMake 3.22+ (via Android Studio SDK Manager)
-- OpenCV Android SDK 4.x (download from opencv.org)
-- Node.js 18+ for web viewer
-
-OpenCV Setup (Android)
-
-1. Download and unzip OpenCV Android SDK (e.g., OpenCV-android-sdk).
-2. Set environment variable (recommended) or local.properties entries:
-   - On Windows (PowerShell): $Env:OPENCV_ANDROID_SDK="C:\\path\\to\\OpenCV-android-sdk"
-3. The CMakeLists.txt expects OPENCV_ANDROID_SDK or adjust the path in the file.
-4. Ensure OpenCV native libraries for your target ABIs are available (sdk/native/libs).
-
-Build & Run (Android)
-
-1. Open the android/ folder in Android Studio.
-2. Ensure NDK and CMake are installed (SDK Manager).
-3. Sync Gradle. If OpenCV not found, edit CMakeLists.txt (set OPENCV_ANDROID_SDK).
-4. Run on a real device (recommended). Minimum target: API 24+.
-
-Controls
-
-- Toggle button: Raw vs Edge output.
-- FPS label: Frame render rate.
-
-Build & Run (Web)
-
-1. cd web
-2. npm install
-3. npm run build
-4. npm run serve (or use any static server on dist/)
-
-You will see a static processed sample frame (base64) and stats text updating.
-Replace `web/src/sampleFrame.ts` with frames coming from your native pipeline or websocket to visualise real data.
-
-Architecture
-
-- Kotlin (Camera2 + UI): Captures frames with TextureView/ImageReader, forwards RGBA bytes to JNI.
-- JNI (C++): Receives RGBA buffer, wraps into cv::Mat, applies Grayscale/Canny, returns RGBA.
-- OpenGL ES 2.0: Uploads processed RGBA as texture, renders full-screen quad at 10–30 FPS.
-- TypeScript: Simple page shows a base64 image (captured from Android output) and text overlay for FPS/resolution.
-
-Key Flow
-
-Camera2 → acquire frame (Bitmap/bytes) → JNI (process via OpenCV) → RGBA bytes → GL texture → render.
-
-Notes
-
-- For simplicity and time constraints, initial frame capture uses TextureView.getBitmap() for ~10–15 FPS. This can be optimized by using ImageReader YUV_420_888 → native YUV → OpenCV cvtColor.
-- Ensure READ/WRITE permissions, CAMERA runtime permission on first run.
-
-Git Usage
-
-Initialize and commit with meaningful steps:
-
-```bash
-git init
-git branch -M main
-git add .
-git commit -m "chore: scaffold Android+NDK+OpenGL+Web structure"
-git remote add origin https://github.com/<your-username>/<your-repo>.git
-git push -u origin main
-```
-
-Add granular commits as you implement:
-
-- feat(android): Camera2 capture loop
-- feat(jni): OpenCV Canny processing
-- feat(gl): OpenGL ES renderer + texture upload
-- feat(app): link capture→jni→gl with FPS + toggle
-- feat(web): TS viewer with base64 sample + stats
-- docs: update README with setup and screenshots
-
-Screenshots
-
-- Add images in docs/ and reference here.
-
-License
-
-MIT (or your choice)

@@ -19,7 +19,13 @@ android {
         externalNativeBuild {
             cmake {
                 cppFlags "-std=c++14"
-                arguments "-DOpenCV_DIR=/path/to/opencv/sdk/native/jni"
+                // Resolve OpenCV Android SDK path from ENV or gradle.properties
+                def opencvHome = System.getenv("OPENCV_ANDROID_SDK") ?: project.findProperty("opencv.dir")
+                if (opencvHome) {
+                    arguments "-DOpenCV_DIR=${opencvHome}/sdk/native/jni"
+                } else {
+                    logger.lifecycle("[warn] OPENCV_ANDROID_SDK not set and opencv.dir not found; CMake will try default path")
+                }
             }
         }
 
